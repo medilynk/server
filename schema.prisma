@@ -1,0 +1,86 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id         Int     @id @default(autoincrement())
+  first_name String
+  last_name  String?
+  email      String  @unique
+  password   String
+}
+
+model Patient {
+  id           Int            @id @default(autoincrement())
+  first_name   String
+  last_name    String?
+  email        String
+  phone        Int
+  Appointment  Appointment[]
+  Prescription Prescription[]
+}
+
+model Department {
+  id     Int      @id @default(autoincrement())
+  name   String
+  Doctor Doctor[]
+}
+
+model Shift {
+  id          Int           @id @default(autoincrement())
+  day_of_week String
+  timings     String
+  Appointment Appointment[]
+}
+
+model Doctor {
+  id           Int            @id @default(autoincrement())
+  first_name   String
+  last_name    String?
+  email        String
+  password     String
+  phone        Int
+  dept_id      Int
+  shift_id     Int
+  department   Department     @relation(fields: [dept_id], references: [id])
+  Appointment  Appointment[]
+  Prescription Prescription[]
+}
+
+model Appointment {
+  id         Int     @id @default(autoincrement())
+  patient_id Int
+  doctor_id  Int
+  shift_id   Int
+  patient    Patient @relation(fields: [patient_id], references: [id])
+  doctor     Doctor  @relation(fields: [doctor_id], references: [id])
+  shift      Shift   @relation(fields: [shift_id], references: [id])
+}
+
+model Prescription {
+  id              Int      @id @default(autoincrement())
+  patient_id      Int
+  doctor_id       Int
+  medication_name String
+  dosage          String?
+  instructions    String?
+  date_prescribed DateTime
+  patient         Patient  @relation(fields: [patient_id], references: [id])
+  doctor          Doctor   @relation(fields: [doctor_id], references: [id])
+}
+
+model Staff {
+  id         Int     @id @default(autoincrement())
+  first_name String
+  last_name  String?
+  email      String  @unique
+  password   String
+  phone      Int
+}

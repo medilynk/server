@@ -6,8 +6,8 @@ import {
   register_doctor,
   register_patient,
   register_staff,
-} from "../controllers/auth";
-import { verify_admin, verify_staff, verify_doctor } from "../middleware/auth";
+} from "../controllers/auth.js";
+import { verify_admin, verify_staff, verify_doctor } from "../middleware/auth.js";
 const router = express.Router();
 
 router.post("/register/staff", verify_admin, register_staff);

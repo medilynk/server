@@ -12,4 +12,5 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
-export { pool };
+export default pool;
+

@@ -6,9 +6,11 @@ import helmet from "helmet";
 import morgan from "morgan";
 import express from "express";
 import bodyParser from "body-parser";
-
+import { PrismaClient } from "@prisma/client";
 import authRoutes from "./routes/auth.js";
 import { check_admin } from "./controllers/check_admin.js";
+
+check_admin();
 
 // CONFIGS
 dotenv.config();
@@ -22,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const PORT = process.env.PORT || 4000;
-check_admin();
+
 
 // ROUTES
 app.use("/auth", authRoutes);
