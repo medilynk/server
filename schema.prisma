@@ -33,13 +33,6 @@ model Department {
   Doctor Doctor[]
 }
 
-model Shift {
-  id          Int           @id @default(autoincrement())
-  day_of_week String
-  timings     String
-  Appointment Appointment[]
-}
-
 model Doctor {
   id           Int            @id @default(autoincrement())
   first_name   String
@@ -48,20 +41,18 @@ model Doctor {
   password     String
   phone        Int
   dept_id      Int
-  shift_id     Int
+  shift        DateTime
   department   Department     @relation(fields: [dept_id], references: [id])
   Appointment  Appointment[]
-  Prescription Prescription[]
+  Prescription Prescription[] 
 }
 
 model Appointment {
   id         Int     @id @default(autoincrement())
   patient_id Int
   doctor_id  Int
-  shift_id   Int
   patient    Patient @relation(fields: [patient_id], references: [id])
   doctor     Doctor  @relation(fields: [doctor_id], references: [id])
-  shift      Shift   @relation(fields: [shift_id], references: [id])
 }
 
 model Prescription {

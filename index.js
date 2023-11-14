@@ -6,7 +6,6 @@ import helmet from "helmet";
 import morgan from "morgan";
 import express from "express";
 import bodyParser from "body-parser";
-import { PrismaClient } from "@prisma/client";
 import authRoutes from "./routes/auth.js";
 import { check_admin } from "./controllers/check_admin.js";
 
@@ -16,7 +15,7 @@ check_admin();
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(helmet());
+app.use(helmet());  
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json({ extended: true }));
