@@ -29,11 +29,11 @@ export const register_staff = async (req, res) => {
 
 export const register_doctor = async (req, res) => {
   try {
-    const { first_name, last_name, email, phone, password, dept_id, shift_id } =
-      req.data;
+    const { first_name, last_name, email, phone, password, dept_id, shift } =
+      req.body;
     const salt = await bcrypt.genSalt(10);
     const passHash = await bcrypt.hash(password, salt);
-    const createdDoctor = prisma.doctor.create({
+    const createdDoctor = await prisma.doctor.create({
       data: {
         first_name: first_name,
         last_name: last_name,
@@ -41,7 +41,7 @@ export const register_doctor = async (req, res) => {
         phone: phone,
         password: passHash,
         dept_id: dept_id,
-        shift_id: shift_id,
+        shift: new Date(shift)
       },
     });
     const doctorData = { ...createdDoctor, password: undefined };

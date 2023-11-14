@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const verify_admin = async (req, res) => {
+export const verify_admin = async (req, res, next) => {
   try {
     let token = req.header("Authorization");
     if (!token) return res.status(403).json({ message: "Token not provided." });
@@ -18,6 +18,7 @@ export const verify_admin = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const verify_staff = async (req, res) => {
   try {

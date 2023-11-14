@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/register/staff", verify_admin, register_staff);
 router.post("/register/doctor", verify_admin, register_doctor);
 router.post("/register/patient", verify_staff, register_patient);
-router.post("/login/staff", login_staff);
+router.post("/login/staff",   );
 router.post("/login/doctor", login_doctor);
 router.post("/login/admin", login_admin);
 
