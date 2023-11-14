@@ -20,7 +20,7 @@ export const verify_admin = async (req, res, next) => {
 };
 
 
-export const verify_staff = async (req, res) => {
+export const verify_staff = async (req, res, next) => {
   try {
     let token = req.header("Authorization");
     if (!token) return res.status(403).json({ message: "Token not provided." });
