@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -42,7 +42,6 @@ export const register_staff = async (req, res) => {
 };
 
 //REGISTER DOCTOR
-
 export const register_doctor = async (req, res) => {
   try {
     const { first_name, last_name, email, phone, password, dept_id, shift } =
