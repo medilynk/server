@@ -38,7 +38,7 @@ app.use("/staff", staffRoutes)
 app.use("/doctor", doctorRoutes)
 
 // TEST ROUTE
-app.use("/test", testRoute)
+app.us("/test", testRoute)
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
