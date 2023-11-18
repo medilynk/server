@@ -42,7 +42,8 @@ export const login_staff = async (req, res) => {
     }
     const token = jwt.sign(
       { id: staff.id, type: "staff" },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      {expiresIn:"1w"}
     );
     res.status(200).json({ message: "Login success.", token: token });
   } catch (error) {
@@ -67,7 +68,8 @@ export const login_doctor = async (req, res) => {
     }
     const token = jwt.sign(
       { id: doctor.id, type: "doctor" },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      {expiresIn:"1w"}
     );
     res.status(200).json({ message: "Login success.", token: token });
   } catch (error) {
@@ -92,7 +94,8 @@ export const login_admin = async (req, res) => {
     }
     const token = jwt.sign(
       { id: admin.id, type: "admin" },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      {expiresIn:"1w"}
     );
     res.status(200).json({ message: "Login success.", token: token });
   } catch (error) {
