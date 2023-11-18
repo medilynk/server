@@ -15,7 +15,9 @@ jobs:
                 node-version: 18
 
             - name: Install dependencies
-              run: npm install
+              run: |
+                npm install
+                npx prisma generate < <(echo y)
 
             - name: Start the server
               run: |

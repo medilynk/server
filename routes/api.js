@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-
 router.get("/doctors", async (req, res) => {
   try {
     const doctors = await prisma.doctor.findMany({

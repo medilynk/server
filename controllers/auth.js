@@ -4,9 +4,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-
-
-
 export const register_patient = async (req, res) => {
   try {
     const { first_name, last_name, email, phone } = req.body;
