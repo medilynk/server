@@ -1,32 +1,24 @@
-import { PrismaClient} from "@prisma/client";
 
-const prisma = new PrismaClient()
+const gen_uid = (digits) => {
+    const min = 10 ** (digits - 1);
+    const max = 10 ** digits - 1;
+    let year = new Date().getFullYear();
+    year = year % 100;
+    const num = Math.floor(min + Math.random() * (max - min + 1));
+    return `${year}/${num}`;
+};
 
-function generateRandomNumber(){
-    const random = Math.floor(10000 + Math.random()*90000)
-    return random;
-}
+export const gen_doctor_id = async () => {
+    const uid = gen_uid(5);
+    return `D/${uid}`
+};
 
-    const gen_id = async ()=>{
-    let isUnique = false;
-    let id;
-    while(!isUnique){
-        const year = new Date().getFullYear();
-        const randomNum = generateRandomNumber();
-        id = `DR/${year}/${randomNum}`;
+export const gen_patient_id = () => {
+    const uid = gen_uid(8);
+    return `P/${uid}`;
+};
 
-        const existing_doctor = await prisma.doctor.findUnique({
-            where:{
-                id:id
-            }
-        });
-
-        if(!existing_doctor){
-            isUnique = true;
-        }
-    }
-
-    return id;
-}
-
-export default gen_id;
+export const gen_staff_id = () => {
+    const uid = gen_uid(5);
+    return `S/${uid}`;
+};

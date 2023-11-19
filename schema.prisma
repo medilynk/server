@@ -18,7 +18,7 @@ model Admin {
 }
 
 model Patient {
-  id           Int            @id @default(autoincrement())
+  id           String   @unique
   first_name   String
   last_name    String?
   email        String
@@ -34,7 +34,7 @@ model Department {
 }
 
 model Doctor {
-  id           Int            @id @default(autoincrement())
+  id           String         @unique
   first_name   String
   last_name    String?
   email        String
@@ -49,16 +49,16 @@ model Doctor {
 
 model Appointment {
   id         Int     @id @default(autoincrement())
-  patient_id Int
-  doctor_id  Int
+  patient_id String
+  doctor_id  String
   patient    Patient @relation(fields: [patient_id], references: [id])
   doctor     Doctor  @relation(fields: [doctor_id], references: [id])
 }
 
 model Prescription {
   id              Int      @id @default(autoincrement())
-  patient_id      Int
-  doctor_id       Int
+  patient_id      String
+  doctor_id       String
   medication_name String
   dosage          String?
   instructions    String?
@@ -68,7 +68,7 @@ model Prescription {
 }
 
 model Staff {
-  id         Int     @id @default(autoincrement())
+  id         String  @unique
   first_name String
   last_name  String?
   email      String  @unique
