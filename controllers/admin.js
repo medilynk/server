@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
+import { gen_staff_id } from "../utilities/gen_id.js";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +22,20 @@ export const add_dept = async (req, res) => {
 // REGISTER STAFF
 export const register_staff = async (req, res) => {
   try {
+    let id = gen_staff_id();
+    let isUnique = false;
+    while (!isUnique) {
+      let existing_staff = await prisma.staff.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (!existing_staff) {
+        isUnique = true;
+      } else {
+        id = gen_staff_id();
+      }
+    }
     const { first_name, last_name, email, password, phone } = req.body;
     const salt = await bcrypt.genSalt(10);
     const passHash = await bcrypt.hash(password.toString(), salt);
@@ -56,7 +71,7 @@ export const register_doctor = async (req, res) => {
         phone: phone,
         password: passHash,
         dept_id: dept_id,
-        shift: new Date(shift)
+        shift: new Date(shift),
       },
     });
     const doctorData = { ...createdDoctor, password: undefined };
