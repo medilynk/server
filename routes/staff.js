@@ -5,8 +5,8 @@ import {
   update_appointment,
   delete_appointment,
   read_appointment_all,
-} from "../controllers/appointment.js";
-import { register_patient } from "../controllers/patient.js";
+  register_patient,
+} from "../controllers/staff.js";
 
 const router = express.Router();
 

@@ -18,7 +18,7 @@ model Admin {
 }
 
 model Patient {
-  id           String   @unique
+  id           String         @unique
   first_name   String
   last_name    String?
   email        String
@@ -33,6 +33,14 @@ model Department {
   Doctor Doctor[]
 }
 
+model Shift_Doctor {
+  id        Int      @id @default(autoincrement())
+  day       String
+  time      DateTime
+  doctor_id String
+  doctor    Doctor   @relation(fields: [doctor_id], references: [id])
+}
+
 model Doctor {
   id           String         @unique
   first_name   String
@@ -44,7 +52,8 @@ model Doctor {
   shift        DateTime
   department   Department     @relation(fields: [dept_id], references: [id])
   Appointment  Appointment[]
-  Prescription Prescription[] 
+  Prescription Prescription[]
+  Shift_Doctor Shift_Doctor[]
 }
 
 model Appointment {
