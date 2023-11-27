@@ -12,8 +12,6 @@ import adminRoutes from "./routes/admin.js";
 import doctorRoutes from "./routes/doctor.js"
 import { check_admin } from "./controllers/check_admin.js";
 
-import testRoute from "./routes/testing.js"
-
 check_admin();
 
 // CONFIGS
@@ -36,9 +34,6 @@ app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes)
 app.use("/staff", staffRoutes)
 app.use("/doctor", doctorRoutes)
-
-// TEST ROUTE -> DELETE LATER
-app.use("/test", testRoute)
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
