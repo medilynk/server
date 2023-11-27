@@ -37,7 +37,7 @@ app.use("/admin", adminRoutes)
 app.use("/staff", staffRoutes)
 app.use("/doctor", doctorRoutes)
 
-// TEST ROUTE
+// TEST ROUTE -> DELETE LATER
 app.use("/test", testRoute)
 
 app.listen(PORT, () => {
