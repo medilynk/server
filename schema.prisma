@@ -84,3 +84,21 @@ model Staff {
   password   String
   phone      Int
 }
+
+model Nurse {
+  id         String   @unique
+  first_name String
+  last_name  String?
+  email      String
+  password   String
+  phone      Int
+  room       String[]
+  Room       Room[]
+}
+
+model Room {
+  id       String @unique
+  type     String
+  nurse_id String
+  nurse    Nurse  @relation(fields: [nurse_id], references: [id])
+}
