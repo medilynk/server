@@ -22,3 +22,18 @@ export const gen_staff_id = () => {
     const uid = gen_uid(5);
     return `S/${uid}`;
 };
+
+export const get_nurse_id = () => {
+    const uid = gen_uid(5);
+    return `N/${uid}`;
+}
+
+export const gen_appointment_id = () => {
+    const uid = gen_uid(10);
+    return `A/${uid}`;
+}
+
+export const gen_prescription_id = () => {
+    const uid = gen_uid(10);
+    return `PRES/${uid}`;
+}

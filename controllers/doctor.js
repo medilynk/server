@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
+import { gen_prescription_id } from "../utilities/gen_id.js";
 
 const prisma = new PrismaClient();
 
@@ -28,8 +29,10 @@ export const write_prescription = async (req, res) => {
   try {
     const { patient_id, doctor_id, medication_name, dosage, instructions } =
       req.body;
+    const id = gen_prescription_id();
     const created_prescription = await prisma.prescription.create({
       data: {
+        id: id,
         patient_id: patient_id,
         doctor_id: doctor_id,
         medication_name: medication_name,
