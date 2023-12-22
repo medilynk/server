@@ -1,16 +1,47 @@
 import { PrismaClient } from "@prisma/client";
-import { gen_patient_id } from "../utilities/gen_id.js";
+import { gen_patient_id, gen_appointment_id } from "../utilities/gen_id.js";
 
 const prisma = new PrismaClient();
 
 // Managing Apppointments
 export const create_appointment = async (req, res) => {
   try {
-    const { patient_id, doctor_id } = req.body;
+    const { patient_id, doctor_id, scheduled_date } = req.body;
+    const id = gen_appointment_id();
     const created_appointment = await prisma.appointment.create({
       data: {
-        doctor_id: doctor_id,
-        patient_id: patient_id,
+        id: id,
+        scheduled_date: new Date(scheduled_date).toISOString(),
+        doctor: {
+          connect: {
+            id: doctor_id,
+          },
+        },
+        patient: {
+          connect: {
+            id: patient_id,
+          },
+        },
+      },
+    });
+    const updated_patient = await prisma.patient.update({
+      where: {
+        id: patient_id,
+      },
+      data: {
+        appointments: {
+          push: create_appointment.id,
+        },
+      },
+    });
+    const updated_doctor = await prisma.doctor.update({
+      where: {
+        id: doctor_id,
+      },
+      data: {
+        appointments: {
+          push: create_appointment.id,
+        },
       },
     });
     res.status(201).json({
@@ -24,19 +55,18 @@ export const create_appointment = async (req, res) => {
 
 export const update_appointment = async (req, res) => {
   try {
-    const { doctor_id, patient_id, id } = req.body;
+    const { id, scheduled_date } = req.body;
     const updated_appointment = await prisma.appointment.update({
       where: {
         id: id,
       },
       data: {
-        patient_id: patient_id,
-        doctor_id: doctor_id,
+        scheduled_date: new Date(scheduled_date).toISOString(),
       },
     });
     res.status(200).json({
       message: "Updated appointment.",
-      data: update_appointment,
+      data: updated_appointment,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -101,3 +131,49 @@ export const register_patient = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const update_patient = async (req, res) => {
+  try {
+    const { id, ...updateData } = req.body;
+    const updatedPatient = await prisma.patient.update({
+      where: {
+        id: id,
+      },
+      data: updateData,
+    });
+    res.status(200).json({
+      message: "Updated patient.",
+      data: updatedPatient,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const delete_patient = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const deletedPatient = await prisma.patient.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.status(200).json({ message: "Patient Deleted." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const get_patient = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const patient = await prisma.patient.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    res.status(200).json({ message: "Patient fetched.", data: patient });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
