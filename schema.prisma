@@ -59,7 +59,7 @@ model Appointment {
   patient_id     String
   doctor_id      String
   scheduled_date DateTime
-  completed      Boolean  @default(false)
+  attended       Boolean  @default(false)
   patient        Patient  @relation(fields: [patient_id], references: [id])
   doctor         Doctor   @relation(fields: [doctor_id], references: [id])
 }
