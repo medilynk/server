@@ -24,26 +24,6 @@ export const create_appointment = async (req, res) => {
         },
       },
     });
-    const updated_patient = await prisma.patient.update({
-      where: {
-        id: patient_id,
-      },
-      data: {
-        appointments: {
-          push: create_appointment.id,
-        },
-      },
-    });
-    const updated_doctor = await prisma.doctor.update({
-      where: {
-        id: doctor_id,
-      },
-      data: {
-        appointments: {
-          push: create_appointment.id,
-        },
-      },
-    });
     res.status(201).json({
       message: "Created Appointment.",
       data: created_appointment,
@@ -93,6 +73,32 @@ export const read_appointment_all = async (req, res) => {
     res.status(200).json({
       message: "Fetched all appointments.",
       data: all_appointments,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const get_appointments = async (req, res) => {
+  try {
+    const { date, ...otherData } = req.body;
+    const startOfDay = new Date(date);
+    const endOfDay = new Date(date);
+    endOfDay.setDate(endOfDay.getDate() + 1);
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        scheduled_date: {
+          gte: startOfDay,
+          lt: endOfDay,
+        },
+      },
+      where: {
+        ...otherData,
+      },
+    });
+    res.status(200).json({
+      message: "Fetched appointments by date.",
+      data: appointments,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -176,4 +182,4 @@ export const get_patient = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
