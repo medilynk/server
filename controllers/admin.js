@@ -81,6 +81,44 @@ export const delete_staff = async (req, res) => {
   }
 };
 
+export const list_all_staff = async (req, res) => {
+  try {
+    const staffs = await prisma.staff.findMany(
+      {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      (err, result) => {
+        if (err) throw err;
+        return result;
+      }
+    );
+    res.status(200).json({ message: "Fetched all staff.", data: staffs });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const get_staff_by_id = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const staff = await prisma.staff.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    const staffData = { ...staff, password: undefined };
+    res.status(200).json({ message: "Fetched staff.", data: staffData });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Managing Doctor
 export const register_doctor = async (req, res) => {
   try {
@@ -142,6 +180,47 @@ export const delete_doctor = async (req, res) => {
       },
     });
     res.status(200).json({ message: "Doctor deleted." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const list_all_doctors = async (req, res) => {
+  try {
+    // select all fields except password in prisma query
+    const doctors = await prisma.doctor.findMany(
+      {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          phone: true,
+          dept_id: true,
+          shifts: true,
+        },
+      },
+      (err, result) => {
+        if (err) throw err;
+        return result;
+      }
+    );
+    res.status(200).json({ message: "Fetched all doctors.", data: doctors });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const get_doctor_by_id = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const doctor = await prisma.doctor.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    const doctorData = { ...doctor, password: undefined };
+    res.status(200).json({ message: "Fetched doctor.", data: doctorData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
