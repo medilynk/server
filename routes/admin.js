@@ -14,11 +14,13 @@ import {
   get_staff_by_id,
   get_doctor_by_id,
   list_all_doctors,
+  get_shift_by_day,
 } from "../controllers/admin.js";
 const router = express.Router();
 
 // Shifts routes
 router.get("/shifts", verify_admin, list_all_shifts);
+router.post("/shifts/day", verify_admin, get_shift_by_day);
 router.post("/shift/add", verify_admin, add_shift);
 router.patch("/shift/update", verify_admin, update_shift);
 router.delete("/shift/delete/:id", verify_admin, delete_shift);
