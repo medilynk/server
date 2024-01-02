@@ -236,6 +236,23 @@ export const list_all_shifts = async (req, res) => {
   }
 };
 
+export const get_shift_by_day = async (req, res) => {
+  try {
+    const { day } = req.body;
+    const shift = await prisma.shift_Doctor.findMany({
+      where: {
+        day: {
+          contains: day,
+          mode: "insensitive",
+        },
+      },
+    });
+    res.status(200).json({ message: "Fetched shift.", data: shift });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const add_shift = async (req, res) => {
   try {
     const { day, start_time, end_time } = req.body;
