@@ -9,9 +9,9 @@ import {
 
 const router = express.Router();
 
-router.get("/appointments", verify_doctor, get_doctor_appointments);
 router.post("/prescription", verify_doctor, write_prescription);
 router.patch("/prescription", verify_doctor, edit_prescription);
+router.get("/appointments", verify_doctor, get_doctor_appointments);
 router.post("/appointment/get", verify_doctor, get_appointment_by_date);
 
 export default router;

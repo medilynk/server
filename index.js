@@ -5,7 +5,6 @@ import morgan from "morgan";
 import express from "express";
 import bodyParser from "body-parser";
 
-import apiRoutes from "./routes/api.js"
 import authRoutes from "./routes/auth.js";
 import staffRoutes from "./routes/staff.js"
 import adminRoutes from "./routes/admin.js";
@@ -29,7 +28,6 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 const PORT = process.env.PORT || 4000;
 
 // ROUTES
-app.use("/api", apiRoutes)
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes)
 app.use("/staff", staffRoutes)

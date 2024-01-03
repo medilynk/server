@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
+import Mailer from "../utilities/mail.js"
 import { PrismaClient } from "@prisma/client";
 import { gen_staff_id, gen_doctor_id } from "../utilities/gen_id.js";
 
+const mailer = new Mailer();
 const prisma = new PrismaClient();
 
 export const add_dept = async (req, res) => {
@@ -35,6 +37,8 @@ export const register_staff = async (req, res) => {
         password: passHash,
       },
     });
+    createdStaff.password = password;
+    mailer.sendWelcomeEmail(createdStaff);
     const staffData = { ...createdStaff, password: undefined };
     return res.status(201).json({ message: "Staff added.", data: staffData });
   } catch (error) {
@@ -58,6 +62,8 @@ export const update_staff = async (req, res) => {
       },
       data: updateData,
     });
+    if(password) updatedStaff.password = password;
+    mailer.sendWelcomeEmail(updatedStaff);
     const staffData = { ...updatedStaff, password: undefined };
     res
       .status(200)
@@ -139,6 +145,8 @@ export const register_doctor = async (req, res) => {
         shifts: shifts,
       },
     });
+    createdDoctor.password = password;
+    mailer.sendWelcomeEmail(createdDoctor);
     const doctorData = { ...createdDoctor, password: undefined };
     res.status(201).json({ message: "Doctor added.", data: doctorData });
   } catch (error) {
@@ -162,6 +170,8 @@ export const update_doctor = async (req, res) => {
       },
       data: updateData,
     });
+    if(password) updatedDoctor.password = password;
+    mailer.sendWelcomeEmail(updatedDoctor);
     const doctorData = { ...updatedDoctor, password: undefined };
     res
       .status(200)
