@@ -1,14 +1,20 @@
 import express from "express";
 import { verify_admin } from "../middleware/auth.js";
-import { add_dept, delete_staff } from "../controllers/admin.js";
+import {
+  add_dept,
+  delete_staff,
+  get_dept_by_name,
+} from "../controllers/admin.js";
 import {
   add_shift,
+  delete_dept,
   delete_shift,
   update_shift,
   update_staff,
   update_doctor,
   list_all_staff,
   register_staff,
+  list_all_depts,
   list_all_shifts,
   register_doctor,
   get_staff_by_id,
@@ -27,6 +33,9 @@ router.delete("/shift/delete/:id", verify_admin, delete_shift);
 
 // Department routes
 router.post("/add_dept", verify_admin, add_dept);
+router.get("/all/depts", verify_admin, list_all_depts);
+router.post("/get/dept", verify_admin, get_dept_by_name);
+router.delete("/delete/dept/:id", verify_admin, delete_dept);
 
 // Managing Account Routes
 router.get("/all/staffs", verify_admin, list_all_staff);

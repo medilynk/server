@@ -58,38 +58,42 @@ export const get_appointment_by_date = async (req, res) => {
 // Managing Prescriptions
 export const write_prescription = async (req, res) => {
   try {
-    const { patient_id, doctor_id, medication_name, dosage, instructions } =
-      req.body;
+    const { patient_id, medications, instructions } = req.body;
     const id = gen_prescription_id();
+    const token = req.headers.authorization.split(" ")[1];
+    const validated = jwt.verify(token, process.env.JWT_SECRET);
+    if (!validated) {
+      return res.status(401).json({ error: "Unauthorized." });
+    }
+
+    // Map medications array to Prisma Prescription model
+    const medicationObjects = medications.map((medication) => ({
+      name: medication.medication_name,
+      dosage: medication.dosage,
+      instructions: medication.instructions,
+    }));
+
     const created_prescription = await prisma.prescription.create({
       data: {
         id: id,
         patient_id: patient_id,
-        doctor_id: doctor_id,
-        medication_name: medication_name,
-        dosage: dosage,
+        doctor_id: validated.id,
+        medications: { create: medicationObjects },
         instructions: instructions,
-        date_prescribed: new Date().toISOString().split("T")[0],
+        date_prescribed: new Date().toISOString(),
+      },
+      include: {
+        medications: true,
       },
     });
-    res
-      .status(201)
-      .json({ message: "Created Prescription.", data: created_prescription });
+
+    res.status(201).json({
+      message: "Created Prescription.",
+      data: created_prescription,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export const edit_prescription = async (req, res) => {
-  try {
-    const { id, ...otherData } = req.body;
-    const updated_prescription = await prisma.prescription.update({
-      where: {
-        id: id,
-      },
-      data: {
-        otherData,
-      },
-    });
-  } catch (error) {}
-};
+

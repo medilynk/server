@@ -65,15 +65,23 @@ model Appointment {
 }
 
 model Prescription {
-  id              Int      @unique
+  id              String       @unique
   patient_id      String
   doctor_id       String
-  medication_name String
-  dosage          String?
+  medications     Medication[]
   instructions    String?
   date_prescribed DateTime
-  patient         Patient  @relation(fields: [patient_id], references: [id])
-  doctor          Doctor   @relation(fields: [doctor_id], references: [id])
+  patient         Patient      @relation(fields: [patient_id], references: [id])
+  doctor          Doctor       @relation(fields: [doctor_id], references: [id])
+}
+
+model Medication {
+  id              Int          @id @default(autoincrement())
+  name            String
+  dosage          String?
+  instructions    String?
+  prescription    Prescription @relation(fields: [prescription_id], references: [id])
+  prescription_id String
 }
 
 model Staff {
