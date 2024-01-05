@@ -183,3 +183,26 @@ export const get_patient = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const get_doctor_by_name = async (req, res) => {
+  try {
+    const { ...data } = req.body;
+    const doctor = await prisma.doctor.findMany({
+      where: {
+        ...data,
+      },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        phone: true,
+        department: true,
+        shifts: true,
+      },
+    });
+    res.status(200).json({ message: "Doctor fetched.", data: doctor });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

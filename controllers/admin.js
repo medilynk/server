@@ -20,6 +20,46 @@ export const add_dept = async (req, res) => {
   }
 };
 
+export const list_all_depts = async (req, res) => {
+  try {
+    const depts = await prisma.department.findMany();
+    res.status(200).json({ message: "Fetched all departments.", data: depts });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const get_dept_by_name = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const dept = await prisma.department.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: "insensitive",
+        },
+      },
+    });
+    res.status(200).json({ message: "Fetched department.", data: dept });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const delete_dept = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedDept = await prisma.department.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.status(200).json({ message: "Department deleted." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 // Managing Staff
 export const register_staff = async (req, res) => {
   try {
