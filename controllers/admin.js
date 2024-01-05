@@ -51,7 +51,7 @@ export const delete_dept = async (req, res) => {
     const id = req.params.id;
     const deletedDept = await prisma.department.delete({
       where: {
-        id: id,
+        id: parseInt(id),
       },
     });
     res.status(200).json({ message: "Department deleted." });
