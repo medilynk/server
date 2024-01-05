@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Doctor" ALTER COLUMN "phone" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Patient" ALTER COLUMN "phone" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Staff" ALTER COLUMN "phone" SET DATA TYPE TEXT;
