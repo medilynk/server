@@ -1,7 +1,9 @@
+import Mailer from "../utilities/mail.js";
 import { PrismaClient } from "@prisma/client";
 import { gen_patient_id, gen_appointment_id } from "../utilities/gen_id.js";
 
 const prisma = new PrismaClient();
+const mailer = new Mailer();
 
 // Managing Apppointments
 export const create_appointment = async (req, res) => {
@@ -23,7 +25,20 @@ export const create_appointment = async (req, res) => {
           },
         },
       },
+      include: {
+        patient: true,
+        doctor: {
+          select: {
+            first_name: true,
+            last_name: true,
+            email: true,
+            department: true,
+          },
+        },
+      },
     });
+    created_appointment.scheduled_date = scheduled_date;
+    mailer.sendAppointmentEmail(created_appointment);
     res.status(201).json({
       message: "Created Appointment.",
       data: created_appointment,
@@ -43,7 +58,20 @@ export const update_appointment = async (req, res) => {
       data: {
         scheduled_date: new Date(scheduled_date).toISOString(),
       },
+      include: {
+        patient: true,
+        doctor: {
+          select: {
+            first_name: true,
+            last_name: true,
+            email: true,
+            department: true,
+          },
+        },
+      },
     });
+    updated_appointment.scheduled_date = scheduled_date;
+    mailer.sendReScheduledAppointmentEmail(updated_appointment);
     res.status(200).json({
       message: "Updated appointment.",
       data: updated_appointment,
@@ -132,6 +160,7 @@ export const register_patient = async (req, res) => {
         phone: phone,
       },
     });
+    mailer.sendWelcomeEmailToPatient(createdPatient);
     res.status(201).json({ message: "Created patient.", data: createdPatient });
   } catch (error) {
     res.status(500).json({ message: error.message });
