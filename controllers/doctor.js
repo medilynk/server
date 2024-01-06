@@ -1,8 +1,11 @@
 import jwt from "jsonwebtoken";
+import Mailer from "../utilities/mail.js";
 import { PrismaClient } from "@prisma/client";
+import { gen_prescription } from "../utilities/gen_pdf.js";
 import { gen_prescription_id } from "../utilities/gen_id.js";
 
 const prisma = new PrismaClient();
+const mailer = new Mailer();
 
 // Managing Apppointments
 export const get_doctor_appointments = async (req, res) => {
@@ -65,14 +68,11 @@ export const write_prescription = async (req, res) => {
     if (!validated) {
       return res.status(401).json({ error: "Unauthorized." });
     }
-
-    // Map medications array to Prisma Prescription model
     const medicationObjects = medications.map((medication) => ({
       name: medication.medication_name,
       dosage: medication.dosage,
       instructions: medication.instructions,
     }));
-
     const created_prescription = await prisma.prescription.create({
       data: {
         id: id,
@@ -84,9 +84,18 @@ export const write_prescription = async (req, res) => {
       },
       include: {
         medications: true,
+        doctor: {
+          select: {
+            first_name: true,
+            last_name: true,
+            email: true,
+          },
+        },
+        patient: true,
       },
     });
-
+    const pdfPath = gen_prescription(created_prescription);
+    mailer.sendPrescriptionEmail(created_prescription, pdfPath);
     res.status(201).json({
       message: "Created Prescription.",
       data: created_prescription,
@@ -95,5 +104,3 @@ export const write_prescription = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
