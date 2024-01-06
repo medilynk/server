@@ -12,6 +12,7 @@ import {
   update_shift,
   update_staff,
   update_doctor,
+  delete_doctor,
   list_all_staff,
   register_staff,
   list_all_depts,
@@ -44,7 +45,7 @@ router.post("/get/staff", verify_admin, get_staff_by_id);
 router.patch("/update/staff", verify_admin, update_staff);
 router.post("/register/staff", verify_admin, register_staff);
 
-router.post("/delete/doctor", verify_admin, update_doctor);
+router.post("/delete/doctor", verify_admin, delete_doctor);
 router.get("/all/doctors", verify_admin, list_all_doctors);
 router.post("/get/doctor", verify_admin, get_doctor_by_id);
 router.patch("/update/doctor", verify_admin, update_doctor);
