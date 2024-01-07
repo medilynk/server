@@ -26,7 +26,16 @@ class Mailer {
       from: process.env.MAIL_FROM,
       to: user.email,
       subject: `Hello ${user.first_name}! Your account has been created in HMS.`,
-      text: `Hello ${user.first_name}! \n This is your authentiation details, don't share it with anyone. \n Email: ${user.email} \n Password: ${user.password}.`,
+      text: `Hello ${user.first_name}! \n This is your authentiation details, don't share it with anyone.\n ID: ${user.id} \n Email: ${user.email} \n Password: ${user.password}.`,
+    };
+    await this.transporter.sendMail(mailOptions);
+  }
+  async sendUpdateAccountEmail(user) {
+    const mailOptions = {
+      from: process.env.MAIL_FROM,
+      to: user.email,
+      subject: `Hello ${user.first_name}! Your account has been updated in HMS.`,
+      text: `Hello ${user.first_name}! \n This is your updated authentiation details, don't share it with anyone.\n ID: ${user.id} \n Email: ${user.email} \n Password: ${user.password}.`,
     };
     await this.transporter.sendMail(mailOptions);
   }
@@ -35,7 +44,7 @@ class Mailer {
       from: process.env.MAIL_FROM,
       to: user.email,
       subject: `Hello ${user.first_name}!.`,
-      text: `Hello ${user.first_name}! ${user.last_name}! \n You are registered.`,
+      text: `Hello ${user.first_name}! ${user.last_name}! \n You are registered with patient ID: ${user.id}.`,
     };
     await this.transporter.sendMail(mailOptions);
   }

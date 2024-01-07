@@ -103,7 +103,7 @@ export const update_staff = async (req, res) => {
       data: updateData,
     });
     if(password) updatedStaff.password = password;
-    mailer.sendWelcomeEmail(updatedStaff);
+    mailer.sendUpdateAccountEmail(updatedStaff);
     const staffData = { ...updatedStaff, password: undefined };
     res
       .status(200)
@@ -211,7 +211,7 @@ export const update_doctor = async (req, res) => {
       data: updateData,
     });
     if(password) updatedDoctor.password = password;
-    mailer.sendWelcomeEmail(updatedDoctor);
+    mailer.sendUpdateAccountEmail(updatedDoctor);
     const doctorData = { ...updatedDoctor, password: undefined };
     res
       .status(200)
