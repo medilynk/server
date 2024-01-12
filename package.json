@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/medilynk/server#readme",
   "dependencies": {
-    "@prisma/client": "^5.7.0",
+    "@prisma/client": "^5.7.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
